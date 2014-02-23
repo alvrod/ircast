@@ -13,13 +13,21 @@
 			"
 			>
 
-	<bean id="routes" class="RoutesBean"/>		
+	<bean id="routes" class="MsgProcessor"/>		
+	
+	<bean id="mongoUri" class="com.mongodb.MongoClientURI">
+	    <constructor-arg index="0" value="mongodb://ircast:2s-xxo00s888@ds033429.mongolab.com:33429/ircast"/>	
+	</bean>
+	
+	<bean id="ircastDb" class="com.mongodb.MongoClient">
+	    <constructor-arg index="0" ref="mongoUri"/>	
+    </bean>
 	
     <camelContext id="camel" trace="false" xmlns="http://camel.apache.org/schema/spring" streamCache="true">
-		<route id="test">
-			<from uri="irc:ircast@chat.freenode.net?channels=#uruguay&amp;nickname=ircast&amp;onReply=false&amp;onNick=false&amp;onQuit=false&amp;onJoin=false&amp;onKick=false&amp;onMode=false&amp;onPart=false&amp;onTopic=false"/>
-			<bean ref="routes" method="setRoot"/>
-			<to uri="file://?fileExist=Append&amp;fileName=${in.header.AppRoot}/${date:now:yyyyMMdd}.txt"/>
+		<route id="consume">
+			<from uri="irc:ircast@chat.freenode.net?channels=#scala-mvd&amp;nickname=ircast&amp;onReply=false&amp;onNick=false&amp;onQuit=false&amp;onJoin=false&amp;onKick=false&amp;onMode=false&amp;onPart=false&amp;onTopic=false"/>
+			<to uri="log:logger.app?showAll=true"/>
+			<to uri="mongodb:ircastDb?database=ircast&amp;collection=scala-mvd&amp;operation=insert"/>
 		</route>
     </camelContext>
 
