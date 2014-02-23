@@ -27,6 +27,7 @@
 		<route id="consume">
 			<from uri="irc:ircast@chat.freenode.net?channels=#scala-mvd&amp;nickname=ircast&amp;onReply=false&amp;onNick=false&amp;onQuit=false&amp;onJoin=false&amp;onKick=false&amp;onMode=false&amp;onPart=false&amp;onTopic=false"/>
 			<to uri="log:logger.app?showAll=true"/>
+			<bean ref="routes" method="setJson"/>
 			<to uri="mongodb:ircastDb?database=ircast&amp;collection=scala-mvd&amp;operation=insert"/>
 		</route>
     </camelContext>
