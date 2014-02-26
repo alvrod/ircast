@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
@@ -29,6 +29,11 @@
 			<to uri="log:logger.app?showAll=true"/>
 			<bean ref="routes" method="setJson"/>
 			<to uri="mongodb:ircastDb?database=ircast&amp;collection=scala-mvd&amp;operation=insert"/>
+		</route>
+		
+		<route id="heartbeat">
+		  <from uri="timer://ircast?fixedRate=true&amp;period=5s"/>
+		  <to uri="log:logger.app.heartbeat"/>
 		</route>
     </camelContext>
 
